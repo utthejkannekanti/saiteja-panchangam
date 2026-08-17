@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Panchangam - Sai Teja Jewellery Works</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+
+<!-- html2canvas for Direct Image Export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #1a1a1a;
+    font-family: "Noto Sans Telugu", sans-serif;
+    color: #333;
+    padding-bottom: 50px;
+}
+
+/* =========================
+   CONTROL PANEL
+========================= */
+.controls-container {
+    max-width: 1080px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.controls-container h2 {
+    margin-top: 0;
+    color: #7b0000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+textarea {
+    width: 100%;
+    height: 240px;
+    padding: 15px;
+    font-family: "Noto Sans Telugu", sans-serif;
+    font-size: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+textarea:focus {
+    border-color: #8b0000;
+}
+
+.uploads-grid {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.upload-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #fdf6e2;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px dashed #c99b20;
+}
+
+.upload-box label {
+    font-weight: 700;
+    font-size: 13px;
+    color: #630000;
+}
+
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 12px 24px;
+    border: 0;
+    border-radius: 8px;
+    background: #8b0000;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #b00000;
+}
+
+button.secondary {
+    background: #d4a017;
+    color: #3b1800;
+}
+
+button.secondary:hover {
+    background: #e6b124;
+}
+
+/* =========================
+   POSTER WRAPPER
+========================= */
+.poster-wrapper {
+    width: 1080px;
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+.poster {
+    width: 1080px;
+    min-height: 1920px;
+    background: radial-gradient(circle at 50% 20%, #fffbf0 0%, #faeec4 50%, #f3da89 100%);
+    border: 16px solid #680000;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.poster::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 4px solid #d4a017;
+    pointer-events: none;
+}
+
+/* =========================
+   HEADER SECTION
+========================= */
+.panchangam-header {
+    text-align: center;
+    padding: 35px 40px 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.om-symbol {
+    font-size: 40px;
+    color: #8b0000;
+}
+
+.main-title {
+    font-size: 46px;
+    font-weight: 900;
+    color: #6b0000;
+    letter-spacing: 1px;
+    margin: 4px 0 10px;
+}
+
+.sub-title {
+    display: inline-block;
+    background: #720000;
+    color: #ffd75a;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 26px;
+    font-weight: 800;
+    border: 2px solid #ffd75a;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.date-box {
+    margin: 18px 60px 20px;
+    background: linear-gradient(135deg, #7b0000, #960000);
+    color: #fff5ce;
+    border: 4px solid #d4a017;
+    border-radius: 20px;
+    text-align: center;
+    padding: 12px;
+    font-size: 36px;
+    font-weight: 900;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+/* =========================
+   PANCHANGAM CONTENT
+========================= */
+.panchangam-content {
+    margin: 0 60px;
+    background: rgba(255, 255, 255, 0.88);
+    border: 3px solid #c89617;
+    border-radius: 20px;
+    padding: 22px 25px;
+    backdrop-filter: blur(4px);
+}
+
+.panchangam-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+}
+
+.panchang-item {
+    background: #fffef7;
+    border-bottom: 2px solid #dfc372;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 23px;
+    line-height: 1.4;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.panchang-label {
+    font-weight: 900;
+    color: #720000;
+}
+
+.panchang-value {
+    color: #1a1a1a;
+    font-weight: 700;
+}
+
+.sun-section {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.sun-box {
+    background: #fff6d2;
+    border: 2px solid #caa025;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: #550000;
+}
+
+/* =========================
+   FOOTER / SHOP BRANDING
+========================= */
+.branding {
+    margin-top: 25px;
+    background: linear-gradient(135deg, #420000 0%, #750000 50%, #3d0000 100%);
+    color: white;
+    padding: 25px 40px 30px;
+    position: relative;
+    border-top: 6px solid #d4a017;
+}
+
+.shop-name {
+    text-align: center;
+    font-family: 'Cinzel', Georgia, serif;
+    color: #ffd44d;
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: 4px;
+}
+
+.shop-subtitle {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+    margin-top: -6px;
+}
+
+.tagline {
+    text-align: center;
+    color: #ffe08a;
+    font-size: 22px;
+    margin-top: 6px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.jewellery-gallery {
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    max-width: 960px;
+}
+
+.jewellery-card {
+    height: 190px;
+    background: #fff8df;
+    border: 4px solid #d4a017;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.jewellery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.hallmark {
+    text-align: center;
+    background: linear-gradient(90deg, #d4a017, #ffd75a, #d4a017);
+    color: #3b1800;
+    border-radius: 30px;
+    padding: 10px;
+    font-size: 25px;
+    font-weight: 900;
+    margin: 15px auto;
+    max-width: 700px;
+}
+
+.services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.service {
+    border: 2px solid #d4a017;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffe7a0;
+    line-height: 1.4;
+}
+
+.contact {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.phone {
+    font-size: 30px;
+    font-weight: 900;
+    color: #ffd34d;
+}
+
+.address {
+    font-size: 21px;
+    line-height: 1.4;
+    margin-top: 6px;
+    color: #fff;
+}
+
+.instagram {
+    margin-top: 6px;
+    color: #ffd34d;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+/* Print Setup */
+@media print {
+    body { background: white; padding: 0; }
+    .controls-container { display: none; }
+    .poster-wrapper { margin: 0; width: 1080px; }
+    .poster { width: 1080px; min-height: 1920px; border: none; }
+    @page { size: 1080px 1920px; margin: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="controls-container">
+    <h2>🛕 Daily Panchangam Poster Generator</h2>
+    <p>Paste Telugu Panchangam text below (Changes apply instantly):</p>
+    
+    <textarea id="panchangamInput" oninput="generatePoster()">
+*శ్రీమతే రామానుజాయ నమః🙏
+
+*ఈ రోజు.... పిండపితృయజ్ఞః, చుక్కలమావాస్య, గురుమౌఢ్యనివేత్తిః.....🚩🛕🚩.....*
+
+తేదీ:- 12, ఆగష్టు 2026
+సంవత్సరం:- శ్రీ పరాభవ
+అయనం:- దక్షిణాయనం
+ఋతువు:- గ్రీష్మఋతువు
+మాసం:- ఆషాఢమాసం
+పక్షం:- బహుళపక్షం
+తిథి:- అమావాస్య రా.11.24 వరకు
+వారం:- బుధవారం (సౌమ్యవాసరే)
+నక్షత్రం:- పుష్యమి ఉ.08.49 వరకు
+యోగం:- వ్యతీపాతం సా.05.36 వరకు
+కరణం:- చతుష్పాత్ మ.12.42 వరకు
+తదుపరి నాగవం రా.11.41 వరకు
+వర్జ్యం:- రా.09.00 - 10.31 వరకు
+దుర్ముహూర్తము:- ఉ.11.36 - 12.24 వరకు
+అమృతకాలం:- లేదు
+రాహుకాలం:- మ.12.00 - 01.30 వరకు
+యమగండ/కేతుకాలం:- ఉ.07.30 - 09.00 వరకు
+సూర్యరాశి:- కర్కాటకం
+చంద్రరాశి:- కర్కాటకం
+సూర్యోదయం:- 05.58
+సూర్యాస్తమయం:- 06.44
+
+*జై శ్రీమన్నారాయణ!🙏*
+    </textarea>
+
+    <div class="uploads-grid">
+        <div class="upload-box">
+            <label>Image 1</label>
+            <input type="file" id="img1" accept="image/*">
+        </div>
+        <div class="upload-box">
+            <label>Image 2</label>
+            <input type="file" id="img2" accept="image/*">
+        </div>
+        <div class="upload-box">
+            <label>Image 3</label>
+            <input type="file" id="img3" accept="image/*">
+        </div>
+        <div class="upload-box">
+            <label>Image 4</label>
+            <input type="file" id="img4" accept="image/*">
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button onclick="downloadPoster()">📥 Download Image (PNG)</button>
+        <button class="secondary" onclick="window.print()">🖨️ Print / Save PDF</button>
+    </div>
+</div>
+
+<div class="poster-wrapper">
+    <div class="poster" id="poster">
+        
+        <!-- Header -->
+        <div>
+            <div class="panchangam-header">
+                <div class="om-symbol">🛕 🙏 🛕</div>
+                <div class="main-title">శ్రీమతే రామానుజాయ నమః</div>
+                <div class="sub-title" id="todayMessage">ఈ రోజు పంచాంగం</div>
+            </div>
+
+            <!-- Date -->
+            <div class="date-box" id="posterDate">📅 12, ఆగష్టు 2026</div>
+
+            <!-- Panchangam Grid Details -->
+            <div class="panchangam-content">
+                <div class="panchangam-grid" id="panchangGrid"></div>
+                <div class="sun-section">
+                    <div class="sun-box" id="sunrise">🌅 సూర్యోదయం: 05.58</div>
+                    <div class="sun-box" id="sunset">🌇 సూర్యాస్తమయం: 06.44</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branding Section -->
+        <div class="branding">
+            <div class="shop-name">SAI TEJA</div>
+            <div class="shop-subtitle">JEWELLERY WORKS</div>
+            <div class="tagline">ALL TYPES OF GOLD & SILVER ORNAMENTS MAKER</div>
+
+            <div class="jewellery-gallery">
+                <div class="jewellery-card">
+                    <img id="preview1" src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80">
+                </div>
+                <div class="jewellery-card">
+                    <img id="preview2" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80">
+                </div>
+                <div class="jewellery-card">
+                    <img id="preview3" src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=600&q=80">
+                </div>
+                <div class="jewellery-card">
+                    <img id="preview4" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80">
+                </div>
+            </div>
+
+            <div class="hallmark">91.6 KDM GOLD • BIS HALLMARK AVAILABLE</div>
+
+            <div class="services">
+                <div class="service">💍<br>బంగారం & వెండి<br>ఆభరణాలు</div>
+                <div class="service">💎<br>మీకు నచ్చిన డిజైన్‌లో<br>ఆర్డర్‌పై తయారీ</div>
+                <div class="service">🪔<br>వెండి పూజా వస్తువులు<br>లభించును</div>
+            </div>
+
+            <div class="contact">
+                <div class="phone">📞 9866121314 | 9553121314</div>
+                <div class="address">📍 Beside Siddhartha Model High School, Kamalanagar, Vanasthalipuram, Hyderabad – 500070</div>
+                <div class="instagram">📱 Instagram: @saitejajewellery</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function parsePanchangam(text) {
+    const lines = text.split("\n").map(l => l.trim()).filter(l => l !== "");
+    let data = [];
+    let date = "";
+    let todayMessage = "";
+
+    lines.forEach(line => {
+        let clean = line.replace(/\*/g, "").trim();
+
+        if (clean.startsWith("తేదీ")) {
+            let parts = clean.split(/[:-]+/);
+            if (parts.length > 1) date = parts.slice(1).join(":").trim();
+            return;
+        }
+
+        if (clean.includes("ఈ రోజు") || clean.includes("పిండపితృ") || clean.includes("చుక్కలమావాస్య")) {
+            todayMessage = clean.replace(/^[•\-\*]+/, '').trim();
+            return;
+        }
+
+        // Check for field key-value pairs
+        if (clean.includes(":-") || clean.includes(":")) {
+            let delimiter = clean.includes(":-") ? ":-" : ":";
+            let parts = clean.split(delimiter);
+            let label = parts.shift().trim();
+            let value = parts.join(delimiter).trim();
+
+            if (label && value) {
+                data.push({ label, value });
+            }
+        } else if (clean.startsWith("తదుపరి") && data.length > 0) {
+            // Append continuation lines (like "తదుపరి నాగవం...") to the previous item
+            data[data.length - 1].value += " | " + clean;
+        }
+    });
+
+    return { date, todayMessage, data };
+}
+
+function generatePoster() {
+    const text = document.getElementById("panchangamInput").value;
+    const result = parsePanchangam(text);
+
+    if (result.date) {
+        document.getElementById("posterDate").innerHTML = "📅 " + result.date;
+    }
+
+    if (result.todayMessage) {
+        document.getElementById("todayMessage").innerText = result.todayMessage;
+    }
+
+    const grid = document.getElementById("panchangGrid");
+    grid.innerHTML = "";
+
+    let sunrise = "05.58";
+    let sunset = "06.44";
+
+    result.data.forEach(item => {
+        if (item.label.includes("సూర్యోదయం")) {
+            sunrise = item.value;
+            return;
+        }
+        if (item.label.includes("సూర్యాస్తమయం")) {
+            sunset = item.value;
+            return;
+        }
+
+        const div = document.createElement("div");
+        div.className = "panchang-item";
+        div.innerHTML = `
+            <span class="panchang-label">${item.label}:</span>
+            <span class="panchang-value">${item.value}</span>
+        `;
+        grid.appendChild(div);
+    });
+
+    document.getElementById("sunrise").innerHTML = "🌅 సూర్యోదయం: " + sunrise;
+    document.getElementById("sunset").innerHTML = "🌇 సూర్యాస్తమయం: " + sunset;
+}
+
+function setupImageUpload(inputId, imageId) {
+    document.getElementById(inputId).addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById(imageId).src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function downloadPoster() {
+    const poster = document.getElementById("poster");
+    html2canvas(poster, {
+        scale: 2, // 2x resolution for crystal clear image quality
+        useCORS: true
+    }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = `Panchangam_${new Date().toISOString().slice(0, 10)}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
+
+setupImageUpload("img1", "preview1");
+setupImageUpload("img2", "preview2");
+setupImageUpload("img3", "preview3");
+setupImageUpload("img4", "preview4");
+
+// Initial render
+generatePoster();
+</script>
+</body>
+</html>
