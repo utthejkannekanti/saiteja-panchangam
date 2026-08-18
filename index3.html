@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Panchangam - Sai Teja Jewellery Works</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+
+<!-- html2canvas & QRCode.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+:root {
+    --bg-gradient: radial-gradient(circle at 50% 20%, #fffbf0 0%, #faeec4 50%, #f3da89 100%);
+    --poster-border: #680000;
+    --inner-border: #d4a017;
+    --text-primary: #6b0000;
+    --box-bg: rgba(255, 255, 255, 0.88);
+    --item-bg: #fffef7;
+    --item-border: #dfc372;
+    --branding-bg: linear-gradient(135deg, #420000 0%, #750000 50%, #3d0000 100%);
+    --gold-accent: #ffd44d;
+    --grid-font-size: 23px;
+    --header-font-size: 46px;
+}
+
+/* Theme 2: Royal Gold */
+[data-theme="royal-gold"] {
+    --bg-gradient: radial-gradient(circle at 50% 20%, #fffaea 0%, #fae19c 50%, #dfb755 100%);
+    --poster-border: #805b10;
+    --inner-border: #ffd75a;
+    --text-primary: #5c3b00;
+    --box-bg: rgba(255, 253, 240, 0.92);
+    --item-bg: #ffffff;
+    --item-border: #e0be6c;
+    --branding-bg: linear-gradient(135deg, #4a3400 0%, #7a580a 50%, #3b2800 100%);
+    --gold-accent: #ffe285;
+}
+
+/* Theme 3: Deep Maroon */
+[data-theme="maroon"] {
+    --bg-gradient: radial-gradient(circle at 50% 20%, #fff0f0 0%, #fedada 50%, #f5baba 100%);
+    --poster-border: #4d0000;
+    --inner-border: #b8860b;
+    --text-primary: #4d0000;
+    --box-bg: rgba(255, 255, 255, 0.92);
+    --item-bg: #fff5f5;
+    --item-border: #d69898;
+    --branding-bg: linear-gradient(135deg, #2b0000 0%, #4d0000 50%, #220000 100%);
+    --gold-accent: #ffcc00;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #1a1a1a;
+    font-family: "Noto Sans Telugu", sans-serif;
+    color: #333;
+    padding-bottom: 50px;
+}
+
+/* =========================
+   CONTROL PANEL
+========================= */
+.controls-container {
+    max-width: 1080px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.controls-container h2 {
+    margin-top: 0;
+    color: #7b0000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background: #fdf8e9;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #dfc372;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toolbar-group label {
+    font-weight: 700;
+    font-size: 14px;
+    color: #680000;
+}
+
+.toolbar-group select, .toolbar-group input {
+    padding: 6px 12px;
+    border: 1px solid #c99b20;
+    border-radius: 6px;
+    font-weight: 600;
+    outline: none;
+    font-size: 14px;
+}
+
+.font-stepper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.font-stepper button {
+    padding: 6px 14px;
+    background: #7b0000;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.font-stepper span {
+    min-width: 32px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    height: 220px;
+    padding: 15px;
+    font-family: "Noto Sans Telugu", sans-serif;
+    font-size: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+textarea:focus {
+    border-color: #8b0000;
+}
+
+.uploads-grid {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.upload-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #fdf6e2;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px dashed #c99b20;
+}
+
+.upload-box label {
+    font-weight: 700;
+    font-size: 13px;
+    color: #630000;
+}
+
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 12px 24px;
+    border: 0;
+    border-radius: 8px;
+    background: #8b0000;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #b00000;
+}
+
+button.secondary {
+    background: #d4a017;
+    color: #3b1800;
+}
+
+button.secondary:hover {
+    background: #e6b124;
+}
+
+button.whatsapp-btn {
+    background: #25D366;
+    color: #ffffff;
+}
+
+button.whatsapp-btn:hover {
+    background: #1eb855;
+}
+
+button.sample-btn {
+    background: #006699;
+    color: #fff;
+}
+
+button.sample-btn:hover {
+    background: #004c73;
+}
+
+button.clear-btn {
+    background: #4a4a4a;
+    color: #ffffff;
+}
+
+button.clear-btn:hover {
+    background: #2b2b2b;
+}
+
+/* =========================
+   POSTER WRAPPER
+========================= */
+.poster-wrapper {
+    width: 1080px;
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+.poster {
+    width: 1080px;
+    min-height: 1920px;
+    background: var(--bg-gradient);
+    border: 16px solid var(--poster-border);
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.poster::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 4px solid var(--inner-border);
+    pointer-events: none;
+}
+
+/* =========================
+   HEADER SECTION
+========================= */
+.panchangam-header {
+    text-align: center;
+    padding: 35px 40px 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.om-symbol {
+    font-size: 40px;
+    color: var(--text-primary);
+}
+
+.main-title {
+    font-size: var(--header-font-size);
+    font-weight: 900;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+    margin: 4px 0 10px;
+}
+
+.sub-title {
+    display: inline-block;
+    background: var(--poster-border);
+    color: #ffd75a;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 26px;
+    font-weight: 800;
+    border: 2px solid #ffd75a;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.date-box {
+    margin: 18px 60px 20px;
+    background: var(--poster-border);
+    color: #fff5ce;
+    border: 4px solid var(--inner-border);
+    border-radius: 20px;
+    text-align: center;
+    padding: 12px;
+    font-size: 36px;
+    font-weight: 900;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+/* =========================
+   PANCHANGAM CONTENT
+========================= */
+.panchangam-content {
+    margin: 0 60px;
+    background: var(--box-bg);
+    border: 3px solid var(--inner-border);
+    border-radius: 20px;
+    padding: 22px 25px;
+    backdrop-filter: blur(4px);
+}
+
+.panchangam-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+}
+
+.panchang-item {
+    background: var(--item-bg);
+    border-bottom: 2px solid var(--item-border);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: var(--grid-font-size);
+    line-height: 1.4;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.panchang-label {
+    font-weight: 900;
+    color: var(--text-primary);
+}
+
+.panchang-value {
+    color: #1a1a1a;
+    font-weight: 700;
+}
+
+.sun-section {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.sun-box {
+    background: var(--item-bg);
+    border: 2px solid var(--inner-border);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+/* =========================
+   FOOTER / SHOP BRANDING
+========================= */
+.branding {
+    margin-top: 25px;
+    background: var(--branding-bg);
+    color: white;
+    padding: 25px 40px 30px;
+    position: relative;
+    border-top: 6px solid var(--inner-border);
+}
+
+.shop-name {
+    text-align: center;
+    font-family: 'Cinzel', Georgia, serif;
+    color: var(--gold-accent);
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: 4px;
+}
+
+.shop-subtitle {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+    margin-top: -6px;
+}
+
+.tagline {
+    text-align: center;
+    color: #ffe08a;
+    font-size: 22px;
+    margin-top: 6px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.jewellery-gallery {
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    max-width: 960px;
+}
+
+.jewellery-card {
+    height: 190px;
+    background: #fff8df;
+    border: 4px solid var(--inner-border);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.jewellery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.hallmark {
+    text-align: center;
+    background: linear-gradient(90deg, #d4a017, #ffd75a, #d4a017);
+    color: #3b1800;
+    border-radius: 30px;
+    padding: 10px;
+    font-size: 25px;
+    font-weight: 900;
+    margin: 15px auto;
+    max-width: 700px;
+}
+
+.services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.service {
+    border: 2px solid var(--inner-border);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffe7a0;
+    line-height: 1.4;
+}
+
+.contact-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 0 20px;
+    gap: 20px;
+}
+
+.contact-info {
+    flex: 1;
+    text-align: left;
+}
+
+.phone {
+    font-size: 30px;
+    font-weight: 900;
+    color: var(--gold-accent);
+}
+
+.address {
+    font-size: 21px;
+    line-height: 1.4;
+    margin-top: 6px;
+    color: #fff;
+}
+
+.instagram {
+    margin-top: 6px;
+    color: var(--gold-accent);
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 12px;
+    border: 3px solid var(--inner-border);
+}
+
+.qr-box {
+    width: 110px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qr-label {
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 900;
+    color: #25D366;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Print Setup */
+@media print {
+    body { background: white; padding: 0; }
+    .controls-container { display: none; }
+    .poster-wrapper { margin: 0; width: 1080px; }
+    .poster { width: 1080px; min-height: 1920px; border: none; }
+    @page { size: 1080px 1920px; margin: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="controls-container">
+    <h2>🛕 Daily Panchangam Poster Generator</h2>
+
+    <!-- Dynamic Theme & Font Size Controls -->
+    <div class="toolbar">
+        <div class="toolbar-group">
+            <label for="themeSelect">🎨 Theme:</label>
+            <select id="themeSelect" onchange="changeTheme(this.value)">
+                <option value="classic">Traditional Yellow</option>
+                <option value="royal-gold">Royal Gold</option>
+                <option value="maroon">Deep Maroon</option>
+            </select>
+        </div>
+
+        <div class="toolbar-group">
+            <label>🔠 Telugu Text Size:</label>
+            <div class="font-stepper">
+                <button onclick="adjustFontSize(-1)">−</button>
+                <span id="fontSizeDisplay">23px</span>
+                <button onclick="adjustFontSize(1)">+</button>
+            </div>
+        </div>
+
+        <div class="toolbar-group">
+            <label for="qrPhoneInput">📱 WhatsApp QR Number:</label>
+            <input type="text" id="qrPhoneInput" value="919866121314" onchange="updateQRCode(this.value)" placeholder="91 followed by 10-digits">
+        </div>
+    </div>
+
+    <p>Paste Telugu Panchangam text below (Changes apply instantly):</p>
+    
+    <textarea id="panchangamInput" placeholder="Paste your panchangam text here..." oninput="generatePoster()"></textarea>
+
+    <div class="uploads-grid">
+        <div class="upload-box">
+            <label>Image 1</label>
+            <input type="file" id="img1" accept="image/*">
+        </div>
+        <div class="upload-box">
+            <label>Image 2</label>
+            <input type="file" id="img2" accept="image/*">
+        </div>
+        <div class="upload-box">
+            <label>Image 3</label>
+            <input type="file" id="img3" accept="image/*">
+        </div>
+        <div class="upload-box">
+            <label>Image 4</label>
+            <input type="file" id="img4" accept="image/*">
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="whatsapp-btn" id="shareBtn" onclick="shareToWhatsApp()">📲 Share to WhatsApp</button>
+        <button onclick="downloadPoster()">📥 Download Image (PNG)</button>
+        <button class="sample-btn" onclick="loadSampleText()">📋 Load Sample</button>
+        <button class="secondary" onclick="window.print()">🖨️ Print / Save PDF</button>
+        <button class="clear-btn" onclick="clearTextarea()">🗑️ Clear Text</button>
+    </div>
+</div>
+
+<div class="poster-wrapper">
+    <div class="poster" id="poster">
+        
+        <!-- Header -->
+        <div>
+            <div class="panchangam-header">
+                <div class="om-symbol">🛕 🙏 🛕</div>
+                <div class="main-title">శ్రీమతే రామానుజాయ నమః</div>
+                <div class="sub-title" id="todayMessage">ఈ రోజు పంచాంగం</div>
+            </div>
+
+            <!-- Date -->
+            <div class="date-box" id="posterDate">📅 తేదీ</div>
+
+            <!-- Panchangam Grid Details -->
+            <div class="panchangam-content">
+                <div class="panchangam-grid" id="panchangGrid"></div>
+                <div class="sun-section">
+                    <div class="sun-box" id="sunrise">🌅 సూర్యోదయం: --</div>
+                    <div class="sun-box" id="sunset">🌇 సూర్యాస్తమయం: --</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branding Section -->
+        <div class="branding">
+            <div class="shop-name">SAI TEJA</div>
+            <div class="shop-subtitle">JEWELLERY WORKS</div>
+            <div class="tagline">ALL TYPES OF GOLD & SILVER ORNAMENTS MAKER</div>
+
+            <div class="jewellery-gallery">
+                <div class="jewellery-card">
+                    <img id="preview1" src="https://lh3.googleusercontent.com/_NdVN8kpI-Pql1sA1DNyBMANzjNwFjSaFEROOkqrcQeJAhn8ahLsH3U9yYfk0kPXwHGJLelZSyEGZ1lFFg=w1265?auto=format&fit=crop&w=600&q=80">
+                </div>
+                <div class="jewellery-card">
+                    <img id="preview2" src="https://lh3.googleusercontent.com/szCYwgVzcsivXaQYDcgJsWZUH67b7OS4E6KAVL_Z7bBL9V6TIRR9ppSUZR2eS0tNBAKYJMZ9hdqo6Fy71w=w1265?auto=format&fit=crop&w=600&q=80">
+                </div>
+                <div class="jewellery-card">
+                    <img id="preview3" src="https://lh3.googleusercontent.com/Ax6RK-_mS_BdotKgVH6QTSnALBzbouSQOmb1wNZ5Ohdv3q4k4J8YKurMp-8YVRpBdIFto4cudTX1kMNy9w=w1265?auto=format&fit=crop&w=600&q=80">
+                </div>
+                <div class="jewellery-card">
+                    <img id="preview4" src="https://lh3.googleusercontent.com/G-_v4bXdzKcjzJORgfbD81pEeZVGjNJS2vHHn5Tkntbd8hoRDOGoDioLwNHhV2nRTLYNgQXSRvYNZKeNKA=w1265?auto=format&fit=crop&w=600&q=80">
+                </div>
+            </div>
+
+            <div class="hallmark">91.6 KDM GOLD • BIS HALLMARK AVAILABLE</div>
+
+            <div class="services">
+                <div class="service">💍<br>బంగారం & వెండి<br>ఆభరణాలు</div>
+                <div class="service">💎<br>మీకు నచ్చిన డిజైన్‌లో<br>ఆర్డర్‌పై తయారీ</div>
+                <div class="service">🪔<br>వెండి పూజా వస్తువులు<br>లభించును</div>
+            </div>
+
+            <!-- Contact & QR Code -->
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="phone">📞 9866121314 | 9553121314</div>
+                    <div class="address">📍 Beside Siddhartha Model High School, Kamalanagar, Vanasthalipuram, Hyderabad – 500070</div>
+                    <div class="instagram">📱 Instagram: @saitejajewellery</div>
+                </div>
+                
+                <div class="qr-container">
+                    <div id="qrcode" class="qr-box"></div>
+                    <div class="qr-label">💬 Scan to Chat</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentFontSize = 23;
+let qrcodeInstance = null;
+
+function parsePanchangam(text) {
+    const lines = text.split("\n").map(l => l.trim()).filter(l => l !== "");
+    let data = [];
+    let date = "";
+    let todayMessage = "";
+
+    lines.forEach(line => {
+        let clean = line.replace(/\*/g, "").trim();
+
+        if (clean.startsWith("తేదీ")) {
+            let parts = clean.split(/[:-]+/);
+            if (parts.length > 1) date = parts.slice(1).join(":").trim();
+            return;
+        }
+
+        if (clean.includes("ఈ రోజు") || clean.includes("పిండపితృ") || clean.includes("చుక్కలమావాస్య")) {
+            todayMessage = clean.replace(/^[•\-\*]+/, '').trim();
+            return;
+        }
+
+        if (clean.includes(":-") || clean.includes(":")) {
+            let delimiter = clean.includes(":-") ? ":-" : ":";
+            let parts = clean.split(delimiter);
+            let label = parts.shift().trim();
+            let value = parts.join(delimiter).trim();
+
+            if (label && value) {
+                data.push({ label, value });
+            }
+        } else if (clean.startsWith("తదుపరి") && data.length > 0) {
+            data[data.length - 1].value += " | " + clean;
+        }
+    });
+
+    return { date, todayMessage, data };
+}
+
+function generatePoster() {
+    const text = document.getElementById("panchangamInput").value;
+    const result = parsePanchangam(text);
+
+    document.getElementById("posterDate").innerHTML = result.date ? "📅 " + result.date : "📅 తేదీ";
+    document.getElementById("todayMessage").innerText = result.todayMessage ? result.todayMessage : "ఈ రోజు పంచాంగం";
+
+    const grid = document.getElementById("panchangGrid");
+    grid.innerHTML = "";
+
+    let sunrise = "--";
+    let sunset = "--";
+
+    result.data.forEach(item => {
+        if (item.label.includes("సూర్యోదయం")) {
+            sunrise = item.value;
+            return;
+        }
+        if (item.label.includes("సూర్యాస్తమయం")) {
+            sunset = item.value;
+            return;
+        }
+
+        const div = document.createElement("div");
+        div.className = "panchang-item";
+        div.innerHTML = `
+            <span class="panchang-label">${item.label}:</span>
+            <span class="panchang-value">${item.value}</span>
+        `;
+        grid.appendChild(div);
+    });
+
+    document.getElementById("sunrise").innerHTML = "🌅 సూర్యోదయం: " + sunrise;
+    document.getElementById("sunset").innerHTML = "🌇 సూర్యాస్తమయం: " + sunset;
+}
+
+function adjustFontSize(delta) {
+    currentFontSize = Math.max(16, Math.min(30, currentFontSize + delta));
+    document.documentElement.style.setProperty('--grid-font-size', `${currentFontSize}px`);
+    document.getElementById("fontSizeDisplay").innerText = `${currentFontSize}px`;
+}
+
+function changeTheme(themeName) {
+    const poster = document.getElementById("poster");
+    if (themeName === "classic") {
+        poster.removeAttribute("data-theme");
+    } else {
+        poster.setAttribute("data-theme", themeName);
+    }
+}
+
+function updateQRCode(phoneNumber) {
+    const qrContainer = document.getElementById("qrcode");
+    qrContainer.innerHTML = "";
+    
+    const cleanPhone = phoneNumber.replace(/[^0-9]/g, "");
+    const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent("నమస్కారం! Sai Teja Jewellery Works")}`;
+    
+    qrcodeInstance = new QRCode(qrContainer, {
+        text: waUrl,
+        width: 110,
+        height: 110,
+        colorDark: "#333333",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+    });
+}
+
+function loadSampleText() {
+    const sample = `*శ్రీమతే రామానుజాయ నమః🙏
+
+*ఈ రోజు.... పిండపితృయజ్ఞః, చుక్కలమావాస్య, గురుమౌఢ్యనివేత్తిః.....🚩🛕🚩.....*
+
+తేదీ:- 12, ఆగష్టు 2026
+సంవత్సరం:- శ్రీ పరాభవ
+అయనం:- దక్షిణాయనం
+ఋతువు:- గ్రీష్మఋతువు
+మాసం:- ఆషాఢమాసం
+పక్షం:- బహుళపక్షం
+తిథి:- అమావాస్య రా.11.24 వరకు
+వారం:- బుధవారం (సౌమ్యవాసరే)
+నక్షత్రం:- పుష్యమి ఉ.08.49 వరకు
+యోగం:- వ్యతీపాతం సా.05.36 వరకు
+కరణం:- చతుష్పాత్ మ.12.42 వరకు
+తదుపరి నాగవం రా.11.41 వరకు
+వర్జ్యం:- రా.09.00 - 10.31 వరకు
+దుర్ముహూర్తము:- ఉ.11.36 - 12.24 వరకు
+అమృతకాలం:- లేదు
+రాహుకాలం:- మ.12.00 - 01.30 వరకు
+యమగండ/కేతుకాలం:- ఉ.07.30 - 09.00 వరకు
+సూర్యరాశి:- కర్కాటకం
+చంద్రరాశి:- కర్కాటకం
+సూర్యోదయం:- 05.58
+సూర్యాస్తమయం:- 06.44
+
+*జై శ్రీమన్నారాయణ!🙏*`;
+
+    document.getElementById("panchangamInput").value = sample;
+    generatePoster();
+}
+
+function clearTextarea() {
+    const textarea = document.getElementById("panchangamInput");
+    textarea.value = "";
+    generatePoster();
+    textarea.focus();
+}
+
+function setupImageUpload(inputId, imageId) {
+    document.getElementById(inputId).addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById(imageId).src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function downloadPoster() {
+    const poster = document.getElementById("poster");
+    html2canvas(poster, {
+        scale: 2,
+        useCORS: true
+    }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = `Panchangam_${new Date().toISOString().slice(0, 10)}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
+
+async function shareToWhatsApp() {
+    const rawText = document.getElementById("panchangamInput").value.trim();
+    if (!rawText) {
+        alert("Please enter panchangam text first!");
+        return;
+    }
+
+    const shareBtn = document.getElementById("shareBtn");
+    const poster = document.getElementById("poster");
+    const originalText = shareBtn.innerText;
+    
+    shareBtn.innerText = "⏳ Generating...";
+    shareBtn.disabled = true;
+
+    try {
+        const canvas = await html2canvas(poster, {
+            scale: 2,
+            useCORS: true
+        });
+
+        canvas.toBlob(async (blob) => {
+            const file = new File([blob], `Panchangam_${new Date().toISOString().slice(0, 10)}.png`, { type: "image/png" });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        title: "Daily Panchangam - Sai Teja Jewellery Works",
+                        text: "నమస్కారం! ఈ రోజు పంచాంగం - Sai Teja Jewellery Works",
+                        files: [file]
+                    });
+                } catch (err) {
+                    if (err.name !== "AbortError") {
+                        fallbackWhatsAppText();
+                    }
+                }
+            } else {
+                const link = document.createElement("a");
+                link.download = file.name;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                
+                fallbackWhatsAppText();
+            }
+            shareBtn.innerText = originalText;
+            shareBtn.disabled = false;
+        }, "image/png");
+    } catch (err) {
+        shareBtn.innerText = originalText;
+        shareBtn.disabled = false;
+        fallbackWhatsAppText();
+    }
+}
+
+function fallbackWhatsAppText() {
+    const rawText = document.getElementById("panchangamInput").value.trim();
+    const shareMessage = rawText + "\n\n✨ *Sai Teja Jewellery Works*\n📞 9866121314 | 9553121314\n📍 Beside Siddhartha Model High School, Kamalanagar, Vanasthalipuram, Hyderabad";
+    const waUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(shareMessage);
+    window.open(waUrl, "_blank");
+}
+
+setupImageUpload("img1", "preview1");
+setupImageUpload("img2", "preview2");
+setupImageUpload("img3", "preview3");
+setupImageUpload("img4", "preview4");
+
+// Initialize QR code and blank slate
+updateQRCode("919866121314");
+generatePoster();
+</script>
+</body>
+</html>
