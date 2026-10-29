@@ -1,0 +1,25 @@
+{
+  "name": "Sai Teja Daily Panchangam",
+  "short_name": "Daily Panchangam",
+  "description": "Sai Teja Daily Telugu Panchangam Poster Maker",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3eee3",
+  "theme_color": "#680000",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "id": "./daily-panchangam-app"
+}
