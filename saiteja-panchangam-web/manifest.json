@@ -1,25 +1,30 @@
 {
+  "id": "/saiteja-panchangam/sai-teja-daily-panchangam-v3",
   "name": "Sai Teja Daily Panchangam",
-  "short_name": "Daily Panchangam",
+  "short_name": "SaiTeja Panchangam",
   "description": "Sai Teja Daily Telugu Panchangam Poster Maker",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "/saiteja-panchangam/?source=installed-app-v3",
+  "scope": "/saiteja-panchangam/",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
   "background_color": "#f3eee3",
   "theme_color": "#680000",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "/saiteja-panchangam/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "/saiteja-panchangam/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
-  ],
-  "id": "./daily-panchangam-app"
+  ]
 }
